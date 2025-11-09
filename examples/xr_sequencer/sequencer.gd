@@ -8,7 +8,7 @@ var players:Array
 var sequence = []
 var file_names = []
 
-@export var path_str = "res://samples" 
+@export var path_str = "" 
 @export var pad_scene:PackedScene
 
 @export var steps = 8
@@ -30,11 +30,11 @@ func test_sequence():
 	sequence[0][0] = true
 	sequence[4][5] = true
 	sequence[5][7] = true
-	sequence[7][8] = true
-	sequence[8][2] = true
+	sequence[1][8] = true
+	sequence[1][2] = true
 	sequence[3][3] = true
-	sequence[8][4] = true
-	sequence[7][6] = true
+	sequence[3][4] = true
+	sequence[2][6] = true
 
 func initialise_sequence(rows, cols):
 	for i in range(rows):
@@ -63,6 +63,7 @@ func _ready():
 	# test_sequence()
 	for i in range(50):
 		var asp = AudioStreamPlayer.new()
+		asp.bus = "Sequencer"
 		add_child(asp)
 		players.push_back(asp)
 
@@ -78,7 +79,7 @@ func print_sequence():
 		
 func play_sample(e, i):
 	
-	print("play sample:" + str(i))
+	# print("play sample:" + str(i))
 	var p:AudioStream = samples[i]
 	var asp = players[asp_index]
 	asp.stream = p
@@ -115,7 +116,8 @@ func make_sequencer():
 			#pad.get_node("MeshInstance3D2").mesh = tm
 			var t = Transform3D()
 			
-			t = t.scaled(Vector3(s, s, s))
+			var s1 = 0.7
+			t = t.scaled(Vector3(s * s1, s * s1, s * s1))
 			t.origin = p
 			mm.multimesh.set_instance_transform(i, t)
 			i += 1

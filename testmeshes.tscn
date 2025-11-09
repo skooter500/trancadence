@@ -1,0 +1,18 @@
+[gd_scene load_steps=5 format=3 uid="uid://bqi2ngx81pm3p"]
+
+[ext_resource type="PackedScene" uid="uid://b2ovoeh7mhvvu" path="res://3d objects/geodesic sphere.glb" id="1_csd8k"]
+[ext_resource type="PackedScene" uid="uid://c1xvruisqyku1" path="res://3d objects/CrystalSpiral.glb" id="2_3c578"]
+[ext_resource type="PackedScene" uid="uid://d2s2sagyle8w2" path="res://3d objects/Alien animation.glb" id="3_8fam7"]
+[ext_resource type="PackedScene" uid="uid://b63wqnlb4ulw" path="res://3d objects/AbstractArtifact.glb" id="4_ogeoq"]
+
+[node name="Node3D" type="Node3D"]
+
+[node name="geodesic sphere" parent="." instance=ExtResource("1_csd8k")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.6875)
+
+[node name="CrystalSpiral" parent="." instance=ExtResource("2_3c578")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.5098267, 0, 0)
+
+[node name="Alien animation" parent="." instance=ExtResource("3_8fam7")]
+
+[node name="AbstractArtifact" parent="." instance=ExtResource("4_ogeoq")]

@@ -1,0 +1,43 @@
+[gd_scene load_steps=7 format=3 uid="uid://b5fcfaksa6exw"]
+
+[ext_resource type="Script" uid="uid://bpatk7f43t115" path="res://questsdg/goal_box_animated.gd" id="1_cdweh"]
+[ext_resource type="Script" uid="uid://dgnag6yx6rwgq" path="res://questsdg/playlist_looper.gd" id="2_mv7m4"]
+[ext_resource type="AudioStream" uid="uid://dj0fpxg4c0pd2" path="res://sounds/spaceship-ambience-with-effects-21420.mp3" id="3_mv7m4"]
+[ext_resource type="PackedScene" uid="uid://b63wqnlb4ulw" path="res://3d objects/AbstractArtifact.glb" id="4_8d1l1"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_mlrym"]
+radius = 0.11249381
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8qoi4"]
+radius = 0.11017887
+
+[node name="sound_box" type="RigidBody3D" groups=["ani_box"]]
+mass = 10.0
+linear_damp = 5.0
+angular_damp = 5.0
+script = ExtResource("1_cdweh")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_mlrym")
+
+[node name="playlist_looper" type="Node3D" parent="."]
+script = ExtResource("2_mv7m4")
+sounds = Array[AudioStream]([ExtResource("3_mv7m4"), null])
+auto_play = true
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="playlist_looper"]
+volume_db = 80.0
+max_db = 6.0
+max_distance = 2.0
+bus = &"Pods"
+
+[node name="Area3D" type="Area3D" parent="." groups=["ani_box"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000256343, -0.00166626, -0.000292974)
+shape = SubResource("SphereShape3D_8qoi4")
+
+[node name="scaler" type="Node3D" parent="Area3D"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="AbstractArtifact" parent="Area3D/scaler" instance=ExtResource("4_8d1l1")]

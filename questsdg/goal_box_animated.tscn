@@ -1,0 +1,41 @@
+[gd_scene load_steps=6 format=3 uid="uid://bdllxnud8sodo"]
+
+[ext_resource type="Script" uid="uid://bpatk7f43t115" path="res://questsdg/goal_box_animated.gd" id="1_5fbwa"]
+[ext_resource type="Script" uid="uid://dgnag6yx6rwgq" path="res://questsdg/playlist_looper.gd" id="2_f6fjf"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_80lwv"]
+size = Vector3(0.2, 0.2, 0.2)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_n4etf"]
+size = Vector3(0.198706, 0.198889, 0.195898)
+
+[sub_resource type="BoxMesh" id="BoxMesh_nlr4n"]
+
+[node name="goal_box_animated" type="RigidBody3D" groups=["ani_box"]]
+mass = 10.0
+linear_damp = 5.0
+angular_damp = 5.0
+script = ExtResource("1_5fbwa")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_80lwv")
+
+[node name="playlist_looper" type="Node3D" parent="."]
+script = ExtResource("2_f6fjf")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="playlist_looper"]
+volume_db = 80.0
+max_db = 6.0
+max_distance = 1.0
+
+[node name="Area3D" type="Area3D" parent="." groups=["ani_box"]]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000256343, -0.00166626, -0.000292974)
+shape = SubResource("BoxShape3D_n4etf")
+
+[node name="scaler" type="Node3D" parent="Area3D"]
+transform = Transform3D(0.2, 0, 0, 0, 0.2, 0, 0, 0, 0.2, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D/scaler"]
+mesh = SubResource("BoxMesh_nlr4n")
