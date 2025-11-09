@@ -1,12 +1,14 @@
-[gd_scene load_steps=24 format=3 uid="uid://cfqtudfiwp0dw"]
+[gd_scene load_steps=30 format=3 uid="uid://cfqtudfiwp0dw"]
 
 [ext_resource type="Script" uid="uid://bs8nmn7mjqaek" path="res://examples/bge/start_passthrough.gd" id="1_fxfes"]
 [ext_resource type="Material" uid="uid://dvo75cymypytd" path="res://examples/tank_game_3d/green.tres" id="2_yos5m"]
 [ext_resource type="Script" uid="uid://crm1vgeaih5wn" path="res://examples/xr_sequencer/sequencer.gd" id="3_584sh"]
 [ext_resource type="FontFile" uid="uid://rvjbc8pu44du" path="res://fonts/Hyperspace.otf" id="4_27qf2"]
 [ext_resource type="PackedScene" uid="uid://dm1qa5btl0821" path="res://examples/xr_sequencer/pad_a.tscn" id="5_shi5d"]
+[ext_resource type="Script" uid="uid://cuc3vc2nafc52" path="res://record.gd" id="5_wjjwd"]
 [ext_resource type="Material" uid="uid://bwy778jyvpj15" path="res://examples/tank_game_3d/seq_mat.tres" id="6_kspo4"]
 [ext_resource type="Script" uid="uid://drtgdi28p6w7b" path="res://addons/hand_pose_detector/hand_pose_detector.gd" id="7_7yujg"]
+[ext_resource type="Script" uid="uid://bsyddgikrhv52" path="res://spawn_in_front.gd" id="7_dcj50"]
 [ext_resource type="Resource" uid="uid://ckjd0xa2a240p" path="res://addons/hand_pose_detector/poses/standard_pose_set.tres" id="8_dcj50"]
 [ext_resource type="PackedScene" uid="uid://cjcehqrfoxav3" path="res://addons/hand_pose_detector/hands/LeftHandHumanoid.gltf" id="9_wjjwd"]
 [ext_resource type="Material" uid="uid://r4hqqldkh2wy" path="res://examples/bge/trans.tres" id="10_5or6k"]
@@ -14,16 +16,6 @@
 [ext_resource type="PackedScene" uid="uid://df5hynbooj1uj" path="res://addons/hand_pose_detector/hand_pose_detector.tscn" id="12_umuo0"]
 [ext_resource type="PackedScene" uid="uid://b2447e5p6kwug" path="res://examples/room/scene_anchor.tscn" id="13_qa2o8"]
 [ext_resource type="PackedScene" uid="uid://cukl4cie1tact" path="res://examples/room/scene_global_mesh.tscn" id="14_bmpu5"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_00q4b"]
-size = Vector2(100, 100)
-
-[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_307sh"]
-
-[sub_resource type="Environment" id="Environment_c4jos"]
-background_mode = 1
-ambient_light_source = 2
-ambient_light_color = Color(1, 1, 1, 1)
 
 [sub_resource type="BoxMesh" id="BoxMesh_ynx41"]
 size = Vector3(0.1, 0.1, 0.1)
@@ -34,6 +26,29 @@ radius = 0.02
 [sub_resource type="SphereMesh" id="SphereMesh_gynoj"]
 radius = 0.02
 height = 0.04
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dcj50"]
+vertex_color_use_as_albedo = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_dcj50"]
+material = SubResource("StandardMaterial3D_dcj50")
+
+[sub_resource type="MultiMesh" id="MultiMesh_wjjwd"]
+transform_format = 1
+use_colors = true
+mesh = SubResource("BoxMesh_dcj50")
+
+[sub_resource type="AudioStreamMicrophone" id="AudioStreamMicrophone_wjjwd"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_00q4b"]
+size = Vector2(100, 100)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_307sh"]
+
+[sub_resource type="Environment" id="Environment_c4jos"]
+background_mode = 1
+ambient_light_source = 2
+ambient_light_color = Color(1, 1, 1, 1)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_2di6e"]
 radius = 0.1
@@ -46,6 +61,47 @@ radius = 0.05
 height = 0.2
 
 [node name="root" type="Node3D"]
+
+[node name="instruments" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.8232094)
+
+[node name="start_stop" type="Area3D" parent="instruments"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24979472, 0.707124, -0.24009693)
+
+[node name="mesh" type="MeshInstance3D" parent="instruments/start_stop"]
+mesh = SubResource("BoxMesh_ynx41")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="instruments/start_stop"]
+shape = SubResource("SphereShape3D_scstw")
+
+[node name="sequencer" type="Marker3D" parent="instruments"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6772518, 0.6735885, -0.60540265)
+script = ExtResource("3_584sh")
+font = ExtResource("4_27qf2")
+pad_scene = ExtResource("5_shi5d")
+steps = 16
+out_color = Color(0, 0, 0.91764706, 0.8156863)
+in_color = Color(0, 0.84313726, 0, 0.52156866)
+
+[node name="Timer" type="Timer" parent="instruments/sequencer"]
+wait_time = 0.2
+autostart = true
+
+[node name="timer_ball" type="MeshInstance3D" parent="instruments/sequencer"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
+mesh = SubResource("SphereMesh_gynoj")
+surface_material_override/0 = ExtResource("6_kspo4")
+
+[node name="MultiMeshInstance3D" type="MultiMeshInstance3D" parent="instruments/sequencer"]
+multimesh = SubResource("MultiMesh_wjjwd")
+
+[node name="record" type="Node" parent="instruments"]
+script = ExtResource("5_wjjwd")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="instruments/record"]
+stream = SubResource("AudioStreamMicrophone_wjjwd")
+autoplay = true
+bus = &"Record"
 
 [node name="start_passthrough" type="Node" parent="."]
 script = ExtResource("1_fxfes")
@@ -71,36 +127,13 @@ environment = SubResource("Environment_c4jos")
 transform = Transform3D(-0.220772, -0.975312, -0.00516406, 0.254535, -0.0627264, 0.965027, -0.941526, 0.211737, 0.2621, -4.2177, 1.84116, -4.5774)
 light_energy = 16.0
 
-[node name="start_stop" type="Area3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.24979472, 0.707124, -0.24009693)
-
-[node name="mesh" type="MeshInstance3D" parent="start_stop"]
-mesh = SubResource("BoxMesh_ynx41")
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="start_stop"]
-shape = SubResource("SphereShape3D_scstw")
-
-[node name="sequencer" type="Marker3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.6772518, 0.6735885, -0.6620455)
-script = ExtResource("3_584sh")
-font = ExtResource("4_27qf2")
-pad_scene = ExtResource("5_shi5d")
-steps = 16
-
-[node name="Timer" type="Timer" parent="sequencer"]
-wait_time = 0.2
-autostart = true
-
-[node name="timer_ball" type="MeshInstance3D" parent="sequencer"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.05, 0)
-mesh = SubResource("SphereMesh_gynoj")
-surface_material_override/0 = ExtResource("6_kspo4")
-
 [node name="XROrigin3D" type="XROrigin3D" parent="."]
 
-[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D"]
+[node name="XRCamera3D" type="XRCamera3D" parent="XROrigin3D" node_paths=PackedStringArray("spawn_in_front")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.10548, 0)
 near = 0.001
+script = ExtResource("7_dcj50")
+spawn_in_front = NodePath("../../instruments")
 
 [node name="AudioListener3D" type="AudioListener3D" parent="XROrigin3D/XRCamera3D"]
 
@@ -170,8 +203,8 @@ shape = SubResource("CapsuleShape3D_j5v6i")
 default_scene = ExtResource("13_qa2o8")
 scenes/global_mesh = ExtResource("14_bmpu5")
 
-[connection signal="area_entered" from="start_stop" to="sequencer" method="_on_start_stop_area_entered"]
-[connection signal="timeout" from="sequencer/Timer" to="sequencer" method="_on_timer_timeout"]
+[connection signal="area_entered" from="instruments/start_stop" to="instruments/sequencer" method="_on_start_stop_area_entered"]
+[connection signal="timeout" from="instruments/sequencer/Timer" to="instruments/sequencer" method="_on_timer_timeout"]
 [connection signal="area_entered" from="XROrigin3D/left/left_hand" to="XROrigin3D/left" method="_on_right_hand_area_entered"]
 [connection signal="area_entered" from="XROrigin3D/right/right_hand" to="XROrigin3D/right" method="_on_right_hand_area_entered"]
 [connection signal="area_exited" from="XROrigin3D/right/right_hand" to="XROrigin3D/right" method="_on_right_hand_area_exited"]

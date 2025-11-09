@@ -16,6 +16,26 @@ var file_names = []
 var rows:int
 var cols:int
 
+signal start
+signal step
+signal stop
+
+@export var out_color:Color
+@export var in_color:Color
+
+
+@onready var mm:MultiMeshInstance3D = $MultiMeshInstance3D
+
+func test_sequence():
+	sequence[0][0] = true
+	sequence[4][5] = true
+	sequence[5][7] = true
+	sequence[7][8] = true
+	sequence[8][2] = true
+	sequence[3][3] = true
+	sequence[8][4] = true
+	sequence[7][6] = true
+
 func initialise_sequence(rows, cols):
 	for i in range(rows):
 		var row = []
@@ -24,12 +44,23 @@ func initialise_sequence(rows, cols):
 		sequence.append(row)
 	self.rows = rows
 	self.cols = cols
+	
+func _process(delta: float) -> void:
+	assign_colors()
+
+func assign_colors():
+	var i = 0
+	for col in range(steps):				
+		for row in range(samples.size()):
+			var c = in_color if sequence[row][col] else out_color
+			mm.multimesh.set_instance_color(i, c)
+			i += 1
 
 func _ready():
 	load_samples()
 	initialise_sequence(samples.size(), steps)
 	make_sequencer()
-	
+	# test_sequence()
 	for i in range(50):
 		var asp = AudioStreamPlayer.new()
 		add_child(asp)
@@ -66,14 +97,15 @@ var spacer = 1.1
 
 func make_sequencer():	
 	
-	for col in range(steps):		
-		
+	mm.multimesh.instance_count = steps * samples.size()
+	var i = 0 
+	for col in range(steps):				
 		for row in range(samples.size()):
 			var pad = pad_scene.instantiate()
 			
 			var p = Vector3(s * col * spacer, s * row * spacer, 0)
 			pad.position = p		
-			pad.rotation = rotation
+			# pad.rotation = rotation
 			#var tm = TextMesh.new()
 			#tm.font = font
 			#tm.font_size = 1
@@ -81,6 +113,12 @@ func make_sequencer():
 			## tm.text = str(row) + "," + str(col)
 			#tm.text = file_names[row]
 			#pad.get_node("MeshInstance3D2").mesh = tm
+			var t = Transform3D()
+			
+			t = t.scaled(Vector3(s, s, s))
+			t.origin = p
+			mm.multimesh.set_instance_transform(i, t)
+			i += 1
 			pad.area_entered.connect(toggle.bind(row, col))
 			add_child(pad)
 		
@@ -119,20 +157,21 @@ func play_step(col):
 		if sequence[row][col]:
 			play_sample(0, row)
 
-var step:int = 0
+var step_index:int = 0
 
 func _on_timer_timeout() -> void:
-	print("step bryan" + str(step))
-	play_step(step)
-	step = (step + 1) % steps
+	play_step(step_index)
+	step_index = (step_index + 1) % steps
 	pass # Replace with function body.
 
 
 func _on_start_stop_area_entered(area: Area3D) -> void:
-	$"../sequencer/Timer".start()
+	# $"../sequencer/Timer".start()
 	
 	if $Timer.is_stopped():
+		start.emit()
 		$Timer.start()
 	else:
+		stop.emit()
 		$Timer.stop()
 	pass # Replace with function body.
