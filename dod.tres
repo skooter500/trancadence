@@ -1,14 +1,8 @@
-[gd_resource type="ArrayMesh" load_steps=4 format=4 uid="uid://b8bigdsmqp5qs"]
+[gd_resource type="ArrayMesh" load_steps=3 format=4 uid="uid://b8bigdsmqp5qs"]
 
-[ext_resource type="Texture2D" uid="uid://xv5ghbd8f2jy" path="res://Holo/smiley2_orm.png" id="1_4n1py"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bwhcj"]
-resource_name = "phong1"
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_apm2s"]
 transparency = 1
 vertex_color_use_as_albedo = true
-albedo_color = Color(0.783209, 0.783209, 0.783209, 0.57575756)
-albedo_texture = ExtResource("1_4n1py")
-emission_enabled = true
 
 [sub_resource type="ArrayMesh" id="ArrayMesh_26sv2"]
 _surfaces = [{
@@ -32,7 +26,7 @@ _surfaces = [{
 "format": 34359742487,
 "index_count": 108,
 "index_data": PackedByteArray("AAABAAIAAAADAAEAAAACAAQABQAGAAcABQAIAAYABQAHAAkACgALAAwACgANAAsADQAOAAsADwAQABEADwASABAADwARABMAFAAVABYAFAAXABUAFwAYABUAGQAaABsAGQAcABoAHAAdABoAHgAfACAAHgAhAB8AHgAgACIAIwAkACUAIwAmACQAJgAnACQAKAApACoAKAArACkAKAAqACwALQAuAC8ALQAwAC4ALQAvADEAMgAzADQAMgA1ADMAMgA2ADUANwA4ADkANwA6ADgAOgA7ADgA"),
-"material": SubResource("StandardMaterial3D_bwhcj"),
+"material": SubResource("StandardMaterial3D_apm2s"),
 "name": "phong1",
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),

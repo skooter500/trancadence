@@ -11,6 +11,7 @@ func _ready():
 	spectrum_analyzer = AudioServer.get_bus_effect_instance(bus_index, 0)
 
 static var energy_db
+static var energy
 
 func _process(_delta):
 	if spectrum_analyzer:
@@ -18,7 +19,7 @@ func _process(_delta):
 		var magnitude = spectrum_analyzer.get_magnitude_for_frequency_range(20, 20000)
 		
 		# Convert to decibels
-		var energy = magnitude.length()
+		energy = magnitude.length()
 		energy_db = linear_to_db(energy)
 		## print("Amplitude: ", energy)
 
