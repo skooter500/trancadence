@@ -1,5 +1,10 @@
 # Trancadence
 
+Created for the Cyberdelic Society Hackathon
+
+C-BASE Berlin 
+
+8th-9th November 2025
 
 ```
 Welcome to the Metaverse
