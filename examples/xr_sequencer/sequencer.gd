@@ -60,7 +60,7 @@ func _ready():
 	load_samples()
 	initialise_sequence(samples.size(), steps)
 	make_sequencer()
-	# test_sequence()
+	test_sequence()
 	for i in range(50):
 		var asp = AudioStreamPlayer.new()
 		asp.bus = "Sequencer"
